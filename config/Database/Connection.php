@@ -22,7 +22,6 @@ class Connection
 			$config['password']
 		);
 		$this->connection = new PDO($stringConnect);
-		$this->connection->exec(sprintf('SET search_path TO %s',$config['schema']));
 	}
 
 	public static function connect()

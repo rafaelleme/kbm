@@ -1,22 +1,27 @@
 version: '3.7'
 
 volumes:
-  pgdata:
+  db:
+    external: true
+
+networks:
+  kbm:
+    external: true
 
 services:
-  postgres:
-    build:
-      context: .
-      target: postgres
-    container_name: postgres
+  db:
+    image: mysql:5.7
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: kbm
-      POSTGRES_USER: kbm
-      POSTGRES_PASSWORD: test123
+      - db:/var/lib/mysql
     ports:
-      - 5432:5432
+      - '33062:3306'
+    environment:
+      - 'MYSQL_DATABASE=kbm'
+      - 'MYSQL_USER=homestead'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ALLOW_EMPTY_PASSWORD=true'
+    networks:
+      - kbm
 
   app:
     build:
@@ -24,11 +29,13 @@ services:
       target: php
     container_name: app
     working_dir: /var/www/app
-    depends_on:
-      - postgres
     volumes:
       - ./:/var/www/app/
       - ./php.ini:/usr/local/etc/php/php.ini
     ports:
       - 8080:8080
     command: php -S 0.0.0.0:8080
+    depends_on:
+      - db
+    networks:
+      - kbm

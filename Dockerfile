@@ -13,12 +13,8 @@ RUN echo 'Install composer' && \
 
 RUN rm /etc/apt/preferences.d/no-debian-php
 
-RUN echo 'Install pdo_pgsql' && \
-	apt-get update -y && apt-get install -y libpq-dev && \
-	docker-php-ext-install -j$(nproc) pgsql && \
-	docker-php-ext-install -j$(nproc) pdo_pgsql && \
-	docker-php-ext-enable pgsql pdo_pgsql
-
-FROM postgres:9.4 as postgres
-
-RUN chmod -R 777 /var/lib/postgresql
+RUN echo 'Install pdo_mysql' && \
+    apt-get update -y && apt-get install -y libpq-dev && \
+    docker-php-ext-install -j$(nproc) mysqli && \
+    docker-php-ext-install -j$(nproc) pdo_mysql && \
+    docker-php-ext-enable mysqli pdo_mysql

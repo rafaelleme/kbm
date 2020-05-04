@@ -1,11 +1,10 @@
 <?php
 
 return [
-	'db' => 'pgsql',
-	'host' => 'postgres',
-	'port' => '5432',
+	'db' => 'mysql',
+	'host' => 'db',
+	'port' => '3306',
 	'database' => 'kbm',
-	'user' => 'kbm',
-	'password' => 'test123',
-    'schema' => 'dbo'
+	'user' => 'root',
+	'password' => ''
 ];
