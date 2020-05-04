@@ -14,7 +14,7 @@ class Router
         $this->namespace = $namespace;
     }
 
-    private function getMethodsWithBody()
+    private function getMethodsWithoutBody()
     {
         return ['get', 'delete'];
     }
@@ -66,7 +66,7 @@ class Router
             $callbacks = explode('@', $routesByRequestMethod[$routeCalled]['callback']);
             $className = $this->namespace . $callbacks[0];
             $controller = new $className();
-            if (!in_array($this->getRequestMethod(), $this->getMethodsWithBody())) {
+            if (!in_array($this->getRequestMethod(), $this->getMethodsWithoutBody())) {
                 echo json_encode($controller->{$callbacks[1]}($request, ...$paramsOfUri));
                 return;
             }
