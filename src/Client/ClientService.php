@@ -13,9 +13,9 @@ class ClientService extends Service
     {
         $client = Client::findByCpf($data['cpf']);
 
-//        if (!empty($client)) {
-//            throw new \Exception('Client already exists.', 200);
-//        }
+        if (!empty($client)) {
+            throw new \Exception('Client already exists.', 200);
+        }
 
         $client = parent::create($data);
 
@@ -30,12 +30,26 @@ class ClientService extends Service
 
 	protected function fill(&$model, array $data): void
 	{
-        $model->name = $data['name'];
-        $model->birthday = $data['birthday'];
-        $model->cpf = $data['cpf'];
-        $model->rg = $data['rg'];
-        $model->tel = $data['tel'];
-	}
+        if (!empty($data['name'])) {
+            $model->name = $data['name'];
+        }
+
+        if (!empty($data['birthday'])) {
+            $model->birthday = $data['birthday'];
+        }
+
+        if (!empty($data['cpf'])) {
+            $model->cpf = $data['cpf'];
+        }
+
+        if (!empty($data['rg'])) {
+            $model->rg = $data['rg'];
+        }
+
+        if (!empty($data['tel'])) {
+            $model->tel = $data['tel'];
+        }
+    }
 
 	public function destroy(string $clientId)
     {

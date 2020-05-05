@@ -21,6 +21,12 @@ class ClientController extends Controller
         return $this->service->create($data);
     }
 
+    public function update(array $data, string $clientId)
+    {
+        $client = Client::find($clientId);
+        return $this->service->update($client, $data);
+    }
+
     public function destroy(string $clientId)
     {
         return $this->service->destroy($clientId);

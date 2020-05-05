@@ -8,6 +8,7 @@ class LoginController extends Controller
 {
 	public function index(array $data)
 	{
-	    // To Login
+	    var_dump('login');
+	    die;
 	}
 }
