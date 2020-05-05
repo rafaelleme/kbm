@@ -47,7 +47,7 @@ class Login
         return base64_encode(json_encode($token,true));
     }
 
-    public static function decodeToken(string $token): array
+    public static function decodeToken(string $token): ?array
     {
         return json_decode(base64_decode($token), true);
     }
@@ -56,10 +56,25 @@ class Login
     {
         $data = self::decodeToken($token);
 
+        if (empty($data)) {
+            return false;
+        }
+
         if (strtotime($data['expiration_date']) >= strtotime(date('Y-m-d H:i:s'))) {
             return true;
         }
 
         return false;
+    }
+
+    public static function released($token): bool
+    {
+        $data = str_replace('Basic ', '', $token);
+
+        if (!$data) {
+            throw new Exception('Token is missing', 401);
+        }
+
+        return self::tokenIsValid($data) ;
     }
 }
