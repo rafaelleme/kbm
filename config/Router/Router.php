@@ -52,6 +52,8 @@ class Router
                         continue;
                     }
 
+                    var_dump($routePart);
+
                     if ($routePart !== $uriParts[$indexParam]) {
                         preg_match('/^[{][a-zA-Z0-9]{1,}[}]$/', $routePart, $match);
                         if (!$match) {
