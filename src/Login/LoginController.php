@@ -6,9 +6,8 @@ use Config\Controller\Controller;
 
 class LoginController extends Controller
 {
-	public function index(array $data)
+	public function index()
 	{
-	    var_dump('login');
-	    die;
+	    return $this->service->login();
 	}
 }
