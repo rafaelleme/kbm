@@ -193,8 +193,10 @@ class Router
         return $this->routes;
     }
 
-    private function decodeRequest(array $data): array
+    private function decodeRequest(?array $data): ?array
     {
+        if (empty($data)) return null;
+
         array_walk_recursive($data, function(&$item, $key){
             $item = utf8_decode($item);
         });

@@ -104,6 +104,27 @@ class Model
 		return [];
 	}
 
+	public static function allByField(array $data)
+    {
+        $calledClass = get_called_class();
+
+        $where = '';
+
+        foreach ($data as $key => $val) {
+            $delimiter = count($data) > 1 && array_key_first($data) !== $key ? ' AND ' : '';
+            $where .= sprintf('%s%s = \'%s\'', $delimiter, $key, $val);
+        }
+
+        $query = 'SELECT * FROM ' . (new $calledClass())->getTable() . ' WHERE ' . $where;
+        $statement = Connection::connect()->getConnection()->prepare($query);
+
+        if ($statement->execute()) {
+            return $statement->fetchAll(\PDO::FETCH_CLASS, $calledClass);
+        }
+
+        return [];
+    }
+
 	public static function find(string $id)
 	{
 		$calledClass = get_called_class();

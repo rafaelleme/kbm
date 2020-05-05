@@ -39,8 +39,11 @@ class ClientService extends Service
 
 	public function destroy(string $clientId)
     {
-        $address = Address::findByClient($clientId);
-        $address->delete();
+        $addresses = Address::allByClient($clientId);
+
+        foreach ($addresses as $address) {
+            $address->delete();
+        }
 
         $client = Client::find($clientId);
         $client->delete();

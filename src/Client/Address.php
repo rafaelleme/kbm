@@ -33,8 +33,8 @@ class Address extends Model
         return $address;
     }
 
-    public static function findByClient(string $clientId)
+    public static function allByClient(string $clientId)
     {
-        return self::findByField(['client_id' => $clientId]);
+        return self::allByField(['client_id' => $clientId]);
     }
 }
