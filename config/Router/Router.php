@@ -26,14 +26,19 @@ class Router
     {
         try {
             $input = json_decode(file_get_contents('php://input'), true);
-            $request = array_merge($input, $_GET);
+            $request = $this->decodeRequest(array_merge($input, $_GET));
             $uriParts = $this->getPartsOfUri();
             if (count($uriParts) === 1 && empty($uriParts[0])) {
                 header('Content-Type: text/html; charset=utf-8;');
                 echo "<div style='top: 45%; left: 45%; position: absolute; font-family: arial,serif;'>API REST PHP</div>";
                 return;
             }
-            $routesByRequestMethod = $this->getRoutesByRequestMethod();
+            $routesByRequestMethod = $this->getRoutesByRequestMethod($uriParts[0]);
+
+            if (!$routesByRequestMethod) {
+                throw new \Exception('Route not found', 404);
+            }
+
             $routesKeys = array_keys($routesByRequestMethod);
             $paramsOfUri = [];
             $routeCalled = '';
@@ -52,10 +57,9 @@ class Router
                         continue;
                     }
 
-                    var_dump($routePart);
-
                     if ($routePart !== $uriParts[$indexParam]) {
                         preg_match('/^[{][a-zA-Z0-9]{1,}[}]$/', $routePart, $match);
+
                         if (!$match) {
                             throw new \Exception('Route not found', 404);
                         }
@@ -169,14 +173,32 @@ class Router
     /**
      * @return mixed
      */
-    private function getRoutesByRequestMethod()
+    private function getRoutesByRequestMethod(string $context): array
     {
         $requestMethod = $this->getRequestMethod();
-        return $this->routes[$requestMethod];
+
+        $res = [];
+
+        foreach ($this->routes[$requestMethod] as $key => $val) {
+            if (preg_match('/' . $context .'/', $key)) {
+                $res[$key] = $val;
+            }
+        }
+
+        return $res;
     }
 
     public function getRoutes()
     {
         return $this->routes;
+    }
+
+    private function decodeRequest(array $data): array
+    {
+        array_walk_recursive($data, function(&$item, $key){
+            $item = utf8_decode($item);
+        });
+
+        return $data;
     }
 }

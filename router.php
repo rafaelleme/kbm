@@ -4,13 +4,18 @@ use Config\Router\Router;
 
 $router = new Router('\\App\\');
 
-$router->post('/login', 'Login\\LoginController@index');
+//$router->post('/login', 'Login\\LoginController@index');
 
 $router->get('/users', 'User\\UserController@index');
 $router->get('/users/{user}', 'User\\UserController@show');
 $router->put('/users/{user}', 'User\\UserController@update');
 $router->post('/users', 'User\\UserController@store');
 $router->delete('/users/{user}', 'User\\UserController@destroy');
+
+$router->get('/clients', 'Client\\ClientController@index');
+$router->get('/clients/{client}', 'Client\\ClientController@show');
+$router->post('/clients', 'Client\\ClientController@store');
+$router->delete('/clients/{client}', 'Client\\ClientController@destroy');
 
 try {
     $router->run();

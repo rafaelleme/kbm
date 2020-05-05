@@ -17,7 +17,7 @@ class UserService extends Service
             throw new \Exception('User already exists.', 200);
         }
 
-        parent::create($data);
+        return parent::create($data);
     }
 
 	protected function fill(&$model, array $data): void

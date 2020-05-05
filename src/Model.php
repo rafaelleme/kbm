@@ -50,6 +50,7 @@ class Model
 		}
 
 		$query .= implode(', ', $arrayAttributes) . ') VALUES (' . implode(', ', $arrayBind) . ')';
+
 		$statement = $this->connection->prepare($query);
 
 		foreach ($arrayAttributes as $attribute) {
