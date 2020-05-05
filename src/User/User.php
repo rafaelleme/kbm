@@ -12,4 +12,9 @@ class User extends Model
 	public $name;
 	public $email;
 	public $password;
+
+	public static function findByEmail(string $email)
+    {
+        return self::findByField(['email' => $email]);
+    }
 }

@@ -115,12 +115,38 @@ class Model
 			$objectCalled = $statement->fetchObject($calledClass);
 		}
 
-		if ($objectCalled) {
+        if (isset($objectCalled) && $objectCalled !== false) {
 			return $objectCalled;
 		}
 
 		throw new \Exception('Model not found', 404);
 	}
+
+	public static function findByField(array $data): ?Model
+    {
+        $calledClass = get_called_class();
+        $model = new $calledClass();
+
+        $where = '';
+
+        foreach ($data as $key => $val) {
+            $delimiter = count($data) > 1 && array_key_first($data) !== $key ? ' AND ' : '';
+            $where .= sprintf('%s%s = \'%s\'', $delimiter, $key, $val);
+        }
+
+        $query = 'SELECT * FROM ' . $model->getTable() . ' WHERE ' . $where;
+        $statement = Connection::connect()->getConnection()->prepare($query);
+
+        if ($statement->execute()) {
+            $objectCalled = $statement->fetchObject($calledClass);
+        }
+
+        if (isset($objectCalled) && $objectCalled !== false) {
+            return $objectCalled;
+        }
+
+        return null;
+    }
 
 	public function delete()
 	{
